@@ -1,16 +1,19 @@
-import { isAxiosError } from "axios";
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 
 const SendParcel = () => {
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
+  const {user} = useAuth();
+  const axiosSecure = useAxiosSecure()
   const serviceCentres = useLoaderData();
 
   const regions = [...new Set(serviceCentres.map((c) => c.region))];
@@ -58,6 +61,15 @@ const SendParcel = () => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+//save the parcel info to the database;
+
+axiosSecure.post("/parcels", data).then((res) => {
+  console.log("after saving parcel", res.data);
+});
+
+      
+
+
         // Swal.fire({
         //   title: "submitted!",
         //   text: "Your parcel has been taken.",
@@ -129,6 +141,7 @@ const SendParcel = () => {
               <input
                 type="text"
                 {...register("senderName")}
+                defaultValue={user?.displayName}
                 className="input w-full"
                 placeholder="Sender Name"
               />
@@ -137,6 +150,7 @@ const SendParcel = () => {
               <input
                 type="email"
                 {...register("senderEmail")}
+                defaultValue={user?.email}
                 className="input w-full"
                 placeholder="Sender Email"
               />
