@@ -33,6 +33,15 @@ const Navbar = () => {
           {" "}
           <NavLink to="/coverage">Services</NavLink>
         </li>
+
+        {user && (
+          <>
+            <li>
+              {" "}
+              <NavLink to="/dashboard/my-parcels">My Parcels</NavLink>
+            </li>
+          </>
+        )}
       </>
     );
     return (

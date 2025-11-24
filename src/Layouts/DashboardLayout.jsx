@@ -1,8 +1,10 @@
 import React from 'react';
+import { Link, NavLink, Outlet } from 'react-router';
+import { CiDeliveryTruck } from "react-icons/ci";
 
 const DashboardLayout = () => {
     return (
-      <div className="drawer lg:drawer-open">
+      <div className="drawer lg:drawer-open max-w-7xl mx-auto">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           {/* Navbar */}
@@ -28,10 +30,10 @@ const DashboardLayout = () => {
                 <path d="M14 10l2 2l-2 2"></path>
               </svg>
             </label>
-            <div className="px-4">Navbar Title</div>
+            <div className="px-4">Zap Shift Dashboard</div>
           </nav>
           {/* Page content here */}
-          <div className="p-4">Page Content</div>
+          <Outlet></Outlet>
         </div>
 
         <div className="drawer-side is-drawer-close:overflow-visible">
@@ -45,7 +47,8 @@ const DashboardLayout = () => {
             <ul className="menu w-full grow">
               {/* List item */}
               <li>
-                <button
+                <Link
+                  to="/"
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Homepage"
                 >
@@ -64,7 +67,19 @@ const DashboardLayout = () => {
                     <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                   </svg>
                   <span className="is-drawer-close:hidden">Homepage</span>
-                </button>
+                </Link>
+              </li>
+
+              {/* our dashboard links */}
+              <li>
+                <NavLink
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="MyParcels"
+                  to="/dashboard/my-parcels"
+                >
+                  <CiDeliveryTruck></CiDeliveryTruck>
+                  <span className="is-drawer-close:hidden"> My Parcels</span>
+                </NavLink>
               </li>
 
               {/* List item */}
