@@ -27,6 +27,10 @@ const Navbar = () => {
         </li>
         <li>
           {" "}
+          <NavLink to="/rider">Be a Rider</NavLink>
+        </li>
+        <li>
+          {" "}
           <NavLink to="/coverage">Coverage</NavLink>
         </li>
         <li>

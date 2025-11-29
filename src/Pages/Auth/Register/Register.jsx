@@ -4,6 +4,7 @@ import useAuth from "../../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import axios from "axios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Register = () => {
   const {
@@ -15,40 +16,51 @@ const Register = () => {
   const { registerUser, updateUserProfile } = useAuth();
 
   const location = useLocation();
-  console.log(location);
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const handleRegistration = (data) => {
-    console.log( 'after registration' , data.photo[0]);
-  const profileImg = data.photo[0];
+    const profileImg = data.photo[0];
 
     registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
+      .then(() => {
         //1...    store the image in form data  and get the photo url
-        
+
         const formData = new FormData();
-        formData.append('image',profileImg)
-//2. send the photo to store and get the url
-              const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOST_KEY}`;
-        axios.post(
-         image_API_URL,formData
-        ).then(res=>{
-          console.log("after image upload", res.data.data.url);
+        formData.append("image", profileImg);
+        //2. send the photo to store and get the url
+        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_IMAGE_HOST_KEY
+        }`;
+        axios.post(image_API_URL, formData).then((res) => {
+
+          const photoURL = res.data.data.url;
+          //CCCCCCCCC Create user in the database
+
+
+          const userInfo = {
+            email: data.email,
+            displayName: data.name,
+            photoURL: photoURL,
+          };
+          axiosSecure.post('/users',userInfo).then(res=>{
+            if(res.data.insertedId){
+              console.log('user created in db')
+            }
+          })
           //update user profile  here to firebase
           const userProfile = {
-            displayName : data.name,
-            photoURL : res.data.data.url
-          }
-          updateUserProfile(userProfile).then(()=>{
-            console.log('User profile update done ');
-            navigate(location.state || '/')
-          }).catch(err=>{
-            console.log(err);
-          })
-        })
-
-
+            displayName: data.name,
+            photoURL: photoURL,
+          };
+          updateUserProfile(userProfile)
+            .then(() => {
+              navigate(location.state || "/");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -132,9 +144,11 @@ const Register = () => {
         </fieldset>
         <p>
           Already Have an Account ?{" "}
-          <Link 
-          state={location.state}
-          to="/login" className="text-green-600 underline">
+          <Link
+            state={location.state}
+            to="/login"
+            className="text-green-600 underline"
+          >
             {" "}
             Login
           </Link>
