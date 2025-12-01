@@ -11,7 +11,7 @@ const axiosSecure = axios.create({
 const useAxiosSecure = () => {
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
-console.log(user?.accessToken);
+// console.log(user?.accessToken);
   useEffect(() => {
 
      if (!user) return;

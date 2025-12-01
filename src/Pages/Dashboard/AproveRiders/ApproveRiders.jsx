@@ -1,7 +1,7 @@
 import React from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
-import { FaUserCheck } from "react-icons/fa6";
+import { FaEye, FaUserCheck } from "react-icons/fa6";
 import { IoPersonRemoveSharp } from "react-icons/io5";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from 'sweetalert2';
@@ -55,7 +55,8 @@ updateRiderStatus(rider,'rejected')
                 <th></th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Status</th>
+                <th> Application Status</th>
+                <th> Worker Status</th>
                 <th>District</th>
                 <th>Action </th>
               </tr>
@@ -77,8 +78,12 @@ updateRiderStatus(rider,'rejected')
                       {rider.status}
                     </p>
                   </td>
+                  <td>{rider.workStatus}</td>
                   <td>{rider.district}</td>
                   <td>
+                    <button className="btn">
+                      <FaEye />
+                    </button>
                     <button
                       onClick={() => {
                         handleApproval(rider);

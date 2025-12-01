@@ -33,10 +33,7 @@ const Navbar = () => {
           {" "}
           <NavLink to="/coverage">Coverage</NavLink>
         </li>
-        <li>
-          {" "}
-          <NavLink to="/coverage">Services</NavLink>
-        </li>
+       
 
         {user && (
           <>
